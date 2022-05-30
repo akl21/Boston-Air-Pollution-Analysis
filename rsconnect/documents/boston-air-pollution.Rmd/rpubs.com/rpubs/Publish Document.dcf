@@ -1,0 +1,11 @@
+name: Publish Document
+title:
+username:
+account: rpubs
+server: rpubs.com
+hostUrl: rpubs.com
+appId: https://api.rpubs.com/api/v1/document/908483/a857f3dfae9b411697e5c6ba2fa0e9c3
+bundleId: https://api.rpubs.com/api/v1/document/908483/a857f3dfae9b411697e5c6ba2fa0e9c3
+url: http://rpubs.com/akml21/908483
+when: 1653931162.94128
+lastSyncTime: 1653931162.94129

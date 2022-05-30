@@ -1,5 +1,5 @@
 ---
-title: "Boston Air Pollution"
+title: "Boston Air Pollution By Neighborhood Socioeconomic Status"
 author: "Annie Lott"
 date: '2022-05-30'
 output: html_document
@@ -28,8 +28,84 @@ df$lstat.med = ifelse(df$lstat > median(df$lstat), "Above Median",
 
 #make a box plot of the air pollution by socioeconomic status
 ggplot(df)+
-  geom_boxplot(aes(x = lstat.med, y = nox), fill = "blue") +
+  geom_boxplot(aes(x = lstat.med, y = nox, fill = lstat.med)) +
   labs(x = "Low Socioeconomic Status Percentage", 
        y = "Nitrogen Oxide Pollution",
-       title = "Boston Air Pollution by Socioeconomic Status")
+       title = "Boston Air Pollution by Socioeconomic Status Box Plot") +
+  theme(legend.position = "none")
 ```
+
+
+Next I compare the mean nitrogen oxide air pollution of neighborhoods with above the median percentage of low socioeconomic status households, and below the median percentage of low socioeconomic status households. I then conduct a t-test to see if the difference of means is statistically significant.
+
+```{r, message = FALSE, warning = FALSE}
+#compare mean air pollution by socioeconomic status category of 
+#below or above median
+mean(df$nox[df$lstat.med == "Above Median"])
+mean(df$nox[df$lstat.med == "Below Median"])
+
+#conduct t-test of the two groups
+t.test(nox ~ lstat.med, data = df)
+#t test is highly significant
+```
+
+There is a significant difference between the air pollution of neighborhoods with higher socioeconomic status and lower socioeconomic status.
+
+Next I create a scatter plot of the nitrogren oxide pollution concentration and the low socioeconomic status percentage of each neighborhood.
+
+```{r, message = FALSE, warning = FALSE}
+#make a scatter plot of air pollution by socioeconomic status
+ggplot(df) +
+  geom_point(aes(x = lstat, y = nox), color = "blue") + 
+  labs(x = "Low Socioeconomic Status Percentage",
+       y = "Nitrogen Oxide Pollution Concentration", 
+       title = "Boston Air Pollution by Socioeconomic Status Scatter Plot")
+```
+
+Visually, there seems to be a positive, increasing relationship between low socioeconomic status percentage and nitrogen oxide pollution concentration, but the association is not very strong.
+
+I conduct a linear regression analysis predicting nitrogen oxide pollution concentration from neighborhood low socioeconomic status percentage.
+
+```{r, message = FALSE, warning = FALSE}
+#create simple linear regression model
+lm.pollution = lm(nox ~ lstat, data = df)
+
+#get linear regression summary
+summary(lm.pollution)
+```
+
+Based on the regression coefficient p-value, the relationship between nitrogen oxide pollution concentration and low socioeconomic status percentage of the neighborhood is significant. This conclusion, however, assumes the least squares simple linear regression model is appropriate.
+
+I plot the line produced by fitting the least squared linear regression model to the data.
+
+```{r, message = FALSE, warning = FALSE}
+#make a scatter plot of air pollution by socioeconomic status with model
+ggplot(df, aes(x = lstat, y = nox)) +
+  geom_point(color = "blue") + 
+  labs(x = "Low Socioeconomic Status Percentage",
+       y = "Nitrogen Oxide Pollution Concentration", 
+       title = "Boston Air Pollution by Socioeconomic Status Linear Model") +
+  geom_smooth(method = lm)
+
+```
+
+I now include code to assess whether the linear regression model meets the conditions needed to serve as an accurate portrayal of the relationship.
+
+```{r, message = FALSE, warning = FALSE}
+#create a data frame with the predicitions and studentized residuals
+df.linassess = data.frame(preds = predict(lm.pollution),
+                         resids = rstudent(lm.pollution))
+
+#create residual plot
+ggplot(df.linassess, aes(x = preds, y = resids))+
+  geom_point(color = "blue") +
+  labs(x = "Linear Model Predictions",
+       y = "Studentized Residuals",
+       title = "Simple Linear Regression Residual Plot") +
+  geom_smooth()
+
+```
+
+The data seems slightly nonlinear, but not enough to invalidate my results.
+
+To summarize, air pollution in Boston historically tended to rise with the percentage of low socioeconomic status households in a neighborhood. This analysis demonstrates the effect of environmental injustice in Boston.
