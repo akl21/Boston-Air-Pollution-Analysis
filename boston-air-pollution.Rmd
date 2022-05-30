@@ -1,0 +1,35 @@
+---
+title: "Boston Air Pollution"
+author: "Annie Lott"
+date: '2022-05-30'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+In this project, I am investigating the relationship between historical nitrogen oxide air pollution in Boston with the past socioeconomic status of each neighborhood. This data was collected in the 1970's, so this analysis is not current and is being used for demonstration purposes only.
+
+Below I present some code to create box plots of the nitrogen oxide air pollution concentration, in parts per 10 million, based on whether the neighborhoods had above the median percentage of low socioeconomic status households within the neighborhood boundaries, or had above the median of percentage of low socioeconomic status households. 
+
+```{r, message = FALSE, warning = FALSE}
+#load libraries
+library(MASS)
+library(ggplot2)
+
+#assign the Boston data set to df
+df = Boston
+
+#create a column that shows whether the low socioeconomic status
+#percentage is below or above the median
+df$lstat.med = ifelse(df$lstat > median(df$lstat), "Above Median",
+                      "Below Median")
+
+#make a box plot of the air pollution by socioeconomic status
+ggplot(df)+
+  geom_boxplot(aes(x = lstat.med, y = nox), fill = "blue") +
+  labs(x = "Low Socioeconomic Status Percentage", 
+       y = "Nitrogen Oxide Pollution",
+       title = "Boston Air Pollution by Socioeconomic Status")
+```
