@@ -1,2 +1,2 @@
 # Boston-Air-Pollution-Analysis
-I use a famous Boston housing data set to assess how nitrogen oxide air pollution is related to various factors.
+I use a famous Boston housing data set to assess how nitrogen oxide air pollution is related to socioeconomic status in Boston. The percentage of households of low socio-economic status in each Boston neighborhood were provided in this data set, along with the levels of nitrogen oxide air pollution. I found that air pollution was generally more severe in neighborhoods with higher percentages of households with low socioeconomic statuses. 
