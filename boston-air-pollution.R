@@ -16,3 +16,12 @@ ggplot(df)+
   labs(x = "Low Socioeconomic Status Percentage", 
        y = "Nitrogen Oxide Pollution",
        title = "Boston Air Pollution by Socioeconomic Status")
+
+#compare mean air pollution by socioeconomic status category of 
+#below or above median
+mean(df$nox[df$lstat.med == "Above Median"])
+mean(df$nox[df$lstat.med == "Below Median"])
+
+#conduct t-test of the two groups
+t.test(nox ~ lstat.med, data = df)
+#t test is highly significant
