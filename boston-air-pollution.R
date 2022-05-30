@@ -10,7 +10,7 @@ df = Boston
 df$lstat.med = ifelse(df$lstat > median(df$lstat), "Above Median",
                       "Below Median")
 
-#make a boxplot of the air pollution by socioeconomic status
+#make a box plot of the air pollution by socioeconomic status
 ggplot(df)+
   geom_boxplot(aes(x = lstat.med, y = nox), fill = "blue") +
   labs(x = "Low Socioeconomic Status Percentage", 
